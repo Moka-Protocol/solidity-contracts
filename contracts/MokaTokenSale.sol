@@ -13,6 +13,7 @@ contract MokaTokenSale is Ownable {
   string[] public acceptedStablecoins;
   mapping(address => uint256) public addressUserMapping;
   mapping(string => address) public stablecoinContracts;
+  mapping(string => uint8) public stablecoinDecimals;
 
   /* Price Bands For User Sign Up */
   struct PriceBand {
@@ -73,7 +74,7 @@ contract MokaTokenSale is Ownable {
     if (price > 0) {
       require(_amount >= price, "Token Amount Incorrect");
       require(stablecoinContracts[_coindId] != address(0), "Stablecoin Address Invalid");
-      bool successPayment = IERC20(stablecoinContracts[_coindId]).transferFrom(msg.sender, owner(), _amount * uint256(10 ** 18));
+      bool successPayment = IERC20(stablecoinContracts[_coindId]).transferFrom(msg.sender, owner(), _amount * uint256(10 ** stablecoinDecimals[_coindId]));
       require(successPayment, "Payment Transfer Failed");
     }
 
@@ -84,17 +85,19 @@ contract MokaTokenSale is Ownable {
     emit userJoined(userCount, msg.sender);
   }
 
-  function setAllowedStableCoins(string[] memory _coins, address[] memory _contracts) public onlyOwner {
+  function setAllowedStableCoins(string[] memory _coins, address[] memory _contracts, uint8[] memory _decimals) public onlyOwner {
     require(_coins.length == _contracts.length, "Array Lengths Incorrect");
 
     //clear current stablecoin list
     for (uint i = 0; i < acceptedStablecoins.length; i++) {
       delete stablecoinContracts[acceptedStablecoins[i]];
+      delete stablecoinDecimals[acceptedStablecoins[i]];
     }
 
     //set new stablecoin list
     for (uint i = 0; i < _coins.length; i++) {
       stablecoinContracts[_coins[i]] = _contracts[i];
+      stablecoinDecimals[_coins[i]] = _decimals[i];
     }
 
     acceptedStablecoins = _coins;

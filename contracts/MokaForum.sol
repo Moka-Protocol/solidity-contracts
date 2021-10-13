@@ -17,7 +17,7 @@ contract MokaForum is Ownable {
   struct SettledPrizePost {
     string dateId;
     uint8 rank;
-    uint32 prize;
+    uint256 prize;
     uint64 postId;
     address user;
   }
@@ -76,18 +76,22 @@ contract MokaForum is Ownable {
   }
 
   function settleDailyPrize(string memory _dailyId, SettledPrizePost[] memory settledPosts) public onlyOwner {
+    require(settledDailyPrizePool[_dailyId].length == 0, "Pool Already Settled");
+
     for (uint8 i = 0; i < settledPosts.length; i++) {
-      bool success = IERC20(mokaERC20Contract).transfer(settledPosts[i].user, settledPosts[i].prize * uint256(10 ** 18));
+      bool success = IERC20(mokaERC20Contract).transfer(settledPosts[i].user, settledPosts[i].prize);
       require(success, "Payment Failed");
-      settledWeeklyPrizePool[_dailyId].push(settledPosts[i]);
+      settledDailyPrizePool[_dailyId].push(settledPosts[i]);
     }
 
     emit SettledDailyPrize(_dailyId, settledPosts);
   }
 
   function settleWeeklyPrize(string memory _weeklyId, SettledPrizePost[] memory settledPosts) public onlyOwner {
+    require(settledWeeklyPrizePool[_dailyId].length == 0, "Pool Already Settled");
+
     for (uint8 i = 0; i < settledPosts.length; i++) {
-      bool success = IERC20(mokaERC20Contract).transfer(settledPosts[i].user, settledPosts[i].prize  * uint256(10 ** 18));
+      bool success = IERC20(mokaERC20Contract).transfer(settledPosts[i].user, settledPosts[i].prize);
       require(success, "Payment Failed");
       settledWeeklyPrizePool[_weeklyId].push(settledPosts[i]);
     }
@@ -96,10 +100,12 @@ contract MokaForum is Ownable {
   }
 
   function settleMonthlyPrize(string memory _monthlyId, SettledPrizePost[] memory settledPosts) public onlyOwner {
+    require(settledMonthlyPrizePool[_dailyId].length == 0, "Pool Already Settled");
+
     for (uint8 i = 0; i < settledPosts.length; i++) {
-      bool success = IERC20(mokaERC20Contract).transfer(settledPosts[i].user, settledPosts[i].prize * uint256(10 ** 18));
+      bool success = IERC20(mokaERC20Contract).transfer(settledPosts[i].user, settledPosts[i].prize);
       require(success, "Payment Failed");
-      settledWeeklyPrizePool[_monthlyId].push(settledPosts[i]);
+      settledMonthlyPrizePool[_monthlyId].push(settledPosts[i]);
     }
 
     emit SettledMonthlyPrize(_monthlyId, settledPosts);
