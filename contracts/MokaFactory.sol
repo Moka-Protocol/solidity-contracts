@@ -16,13 +16,8 @@ contract MokaFactory is Ownable {
     forums.push(Forum(_uid, _name, _mokaForumAddr));
   }
 
-  function deleteForum(address _mokaForumAddr) public onlyOwner {
-    for (uint i = 0; i < forums.length; i++) {
-      if (forums[i].MokaForumAddr == _mokaForumAddr) {
-        delete forums[i];
-        break;
-      }
-    }
+  function resetForum() public onlyOwner {
+    delete forums;
   }
 
   function getForums() public view returns (Forum[] memory) {

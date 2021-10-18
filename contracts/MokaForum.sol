@@ -88,7 +88,7 @@ contract MokaForum is Ownable {
   }
 
   function settleWeeklyPrize(string memory _weeklyId, SettledPrizePost[] memory settledPosts) public onlyOwner {
-    require(settledWeeklyPrizePool[_dailyId].length == 0, "Pool Already Settled");
+    require(settledWeeklyPrizePool[_weeklyId].length == 0, "Pool Already Settled");
 
     for (uint8 i = 0; i < settledPosts.length; i++) {
       bool success = IERC20(mokaERC20Contract).transfer(settledPosts[i].user, settledPosts[i].prize);
@@ -100,7 +100,7 @@ contract MokaForum is Ownable {
   }
 
   function settleMonthlyPrize(string memory _monthlyId, SettledPrizePost[] memory settledPosts) public onlyOwner {
-    require(settledMonthlyPrizePool[_dailyId].length == 0, "Pool Already Settled");
+    require(settledMonthlyPrizePool[_monthlyId].length == 0, "Pool Already Settled");
 
     for (uint8 i = 0; i < settledPosts.length; i++) {
       bool success = IERC20(mokaERC20Contract).transfer(settledPosts[i].user, settledPosts[i].prize);
