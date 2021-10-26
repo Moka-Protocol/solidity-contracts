@@ -119,7 +119,7 @@ library DateTimeLibrary {
     minute = secs / SECONDS_PER_MINUTE;
     second = secs % SECONDS_PER_MINUTE;
   }
-  function timestampToTimeBlocks(uint timestamp) internal pure returns (string memory monthBlock, string memory weekBlock, string memory dayBlock) {
+  function timestampToTimeBlocks(uint timestamp) internal pure returns (bytes32 monthId, bytes32 weekId, bytes32 dayId) {
     uint256 dayOfWeek = getDayOfWeek(timestamp);
     (uint year, uint month, uint day) = timestampToDate(timestamp);
     uint weekYear;
@@ -132,9 +132,9 @@ library DateTimeLibrary {
       (weekYear, weekMonth, weekDay) = (year, month, day);
     }
 
-    monthBlock = string(abi.encodePacked(uint2str(year), "-", uint2str(month)));
-    weekBlock = string(abi.encodePacked(uint2str(weekYear), "-", uint2str(weekMonth), "-", uint2str(weekDay)));
-    dayBlock = string(abi.encodePacked(uint2str(year), "-", uint2str(month), "-", uint2str(day)));
+    monthId = bytes32(abi.encodePacked(uint2str(year), "-", uint2str(month)));
+    weekId = bytes32(abi.encodePacked(uint2str(weekYear), "-", uint2str(weekMonth), "-", uint2str(weekDay)));
+    dayId = bytes32(abi.encodePacked(uint2str(year), "-", uint2str(month), "-", uint2str(day)));
   }
   // 1 = Monday, 7 = Sunday
   function getDayOfWeek(uint256 timestamp) internal pure returns (uint256 dayOfWeek) {
