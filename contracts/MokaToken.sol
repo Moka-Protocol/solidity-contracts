@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract MokaToken is ERC20, Ownable {
   uint8 public POST_PRICE = 6;
   uint8 public VOTE_PRICE = 1;
-  uint256 public constant _totalSupply = 3375775000;
+  uint256 public constant _totalSupply = 3400000000;
   address public mokaPostsContract;
 
   struct SettledPrizePost {

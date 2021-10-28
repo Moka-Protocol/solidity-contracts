@@ -30,8 +30,8 @@ contract MokaTokenSale is Ownable {
     userCount = 0;
     mokaTokenContract = IERC20(tokenAddr);
 
-    tokenDistribution[0] = PriceBand(0, 1000, 0);
-    tokenDistribution[1] = PriceBand(101, 750, 0);
+    tokenDistribution[0] = PriceBand(0, 1000, 5);
+    tokenDistribution[1] = PriceBand(101, 750, 5);
     tokenDistribution[2] = PriceBand(1001, 500, 10);
     tokenDistribution[3] = PriceBand(10001, 250, 15);
     tokenDistribution[4] = PriceBand(100001, 120, 20);
